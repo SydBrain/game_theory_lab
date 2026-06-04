@@ -36,7 +36,7 @@ public class Tournament {
             a.addPoints(turnPayoff.aPlayerPoints());
             b.addPoints(turnPayoff.bPlayerPoints());
 
-            System.out.println("Round " + (i + 1) + " conluded.");
+            System.out.println("Round " + (i + 1) + " concluded.");
             System.out.println(a.getName() + " points = " + a.getPoints());
             System.out.println(b.getName() + " points = " + b.getPoints());
 
@@ -89,7 +89,6 @@ public class Tournament {
         for (int i = 0; i < agents.size(); i++) {
 
             for (int j = i + 1; j < agents.size(); j++) {
-                if (j > agents.size()) return matchups;
 
                 Agent playerA = agents.get(i);
                 Agent playerB = agents.get(j);
