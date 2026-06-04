@@ -82,7 +82,7 @@ public class Tournament {
                 ));
     }
 
-    public List<Matchup> createMatchups(List<Agent> agents) {
+    private List<Matchup> createMatchups(List<Agent> agents) {
 
         List<Matchup> matchups = new ArrayList<>();
 
