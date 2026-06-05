@@ -7,9 +7,7 @@
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="org.lab.controller.TournamentController">
 
-    <!-- ═══════════════════════════════════════════════════
-         STEP 1 — Configure
-    ════════════════════════════════════════════════════ -->
+    <!-- 1 — Configure-->
     <ScrollPane fx:id="configPane" fitToWidth="true">
         <VBox styleClass="root-container" spacing="28">
 
@@ -105,9 +103,7 @@
         </VBox>
     </ScrollPane>
 
-    <!-- ═══════════════════════════════════════════════════
-         STEP 2 — Results
-    ════════════════════════════════════════════════════ -->
+    <!-- STEP 2 — Results -->
     <ScrollPane fx:id="resultsPane" fitToWidth="true" visible="false" managed="false">
         <VBox>
 
