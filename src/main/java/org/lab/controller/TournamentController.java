@@ -4,12 +4,15 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import org.lab.model.*;
 import org.lab.model.PayoffMatrix;
+import org.lab.simulation.MatchResult;
 import org.lab.simulation.NashCalculator;
 import org.lab.simulation.Tournament;
+import org.lab.simulation.TournamentResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +27,10 @@ public class TournamentController {
     @FXML private TableColumn<Map.Entry<String, Integer>, Integer> pointsCol;
     @FXML private BarChart<String, Number> chart;
     @FXML private Label nashLabel;
+    @FXML private Slider roundsSlider;
+    @FXML private Label roundsValue;
+    @FXML private ComboBox<MatchResult> matchSelector;
+    @FXML private LineChart<Number, Number> lineChart;
 
 
     @FXML
@@ -35,12 +42,23 @@ public class TournamentController {
                 PayoffMatrix.hawkDove()
         );
 
+        roundsSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            roundsValue.setText(String.valueOf(newVal.intValue()));
+        });
+
         nameCol.setCellValueFactory(cell ->
                 new SimpleStringProperty(cell.getValue().getKey())
         );
+
         pointsCol.setCellValueFactory(cell ->
                 new SimpleIntegerProperty(cell.getValue().getValue()).asObject()
         );
+
+        matchSelector.setOnAction(event -> {
+            MatchResult selected = matchSelector.getValue();
+            if (selected == null) return;
+            drawLineChart(selected);
+        });
     }
 
     @FXML
@@ -57,17 +75,23 @@ public class TournamentController {
         Tournament tournament = new Tournament();
         PayoffMatrix matrix = gameSelector.getValue();
         if (matrix == null) return;
-        Map<String, Integer> leaderboard = tournament.runTournament(agents, matrix, 10);
 
-        table.getItems().setAll(leaderboard.entrySet());
+        int rounds = (int) roundsSlider.getValue();
+
+        TournamentResult result = tournament.runTournament(agents, matrix, rounds);
+
+        table.getItems().setAll(result.getLeaderboard().entrySet());
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Total Points");
-        leaderboard.forEach((name, points) ->
+        result.getLeaderboard().forEach((name, points) ->
                 series.getData().add(new XYChart.Data<>(name, points))
         );
         chart.getData().clear();
         chart.getData().add(series);
+
+        matchSelector.getItems().clear();
+        matchSelector.getItems().addAll(result.getMatchResults());
 
         NashCalculator nash = new NashCalculator();
         List<Move[]> equilibria = nash.findPureNashEquilibria(matrix);
@@ -79,5 +103,22 @@ public class TournamentController {
         }
 
         nashLabel.setText(sb.toString());
+    }
+
+    private void drawLineChart(MatchResult match) {
+        lineChart.getData().clear();
+
+        XYChart.Series<Number, Number> seriesA = new XYChart.Series<>();
+        seriesA.setName(match.getPlayerAName());
+
+        XYChart.Series<Number, Number> seriesB = new XYChart.Series<>();
+        seriesB.setName(match.getPlayerBName());
+
+        for (int i = 0; i < match.getPlayerAScores().size(); i++) {
+            seriesA.getData().add(new XYChart.Data<>(i, match.getPlayerAScores().get(i)));
+            seriesB.getData().add(new XYChart.Data<>(i, match.getPlayerBScores().get(i)));
+        }
+
+        lineChart.getData().addAll(seriesA, seriesB);
     }
 }

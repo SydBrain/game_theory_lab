@@ -17,6 +17,12 @@
         <CheckBox fx:id="cbTitForTat" text="Tit For Tat" selected="true"/>
     </HBox>
 
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Rounds:" style="-fx-text-fill: white;"/>
+        <Slider fx:id="roundsSlider" min="5" max="200" value="10" showTickLabels="true" showTickMarks="true" majorTickUnit="50" minorTickCount="4" blockIncrement="5"/>
+        <Label fx:id="roundsValue" text="10" style="-fx-text-fill: white;"/>
+    </HBox>
+
     <Button text="Run Tournament" onAction="#onRunTournament"/>
 
     <TableView fx:id="table">
@@ -34,6 +40,13 @@
             <NumberAxis label="Points" animated="false"/>
         </yAxis>
     </BarChart>
+
+    <ComboBox fx:id="matchSelector" promptText="Select a match to view"/>
+
+    <LineChart fx:id="lineChart" animated="false" prefHeight="300">
+        <xAxis><NumberAxis fx:id="roundAxis" label="Round"/></xAxis>
+        <yAxis><NumberAxis label="Cumulative Points"/></yAxis>
+    </LineChart>
 
     <Label fx:id="nashLabel" style="-fx-text-fill: #00ff88; -fx-font-family: monospace;"/>
 

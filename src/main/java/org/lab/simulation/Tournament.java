@@ -33,8 +33,10 @@ public class Tournament {
 
     private record Matchup(Agent playerA, Agent playerB) {}
 
-    public void runMatch(Agent a, Agent b, PayoffMatrix matrix, int rounds) {
-        System.out.println("Match between " + a.getName() + " and " + b.getName());
+    public MatchResult runMatch(Agent a, Agent b, PayoffMatrix matrix, int rounds) {
+
+        List<Integer> playerAScores = new ArrayList<>();
+        List<Integer> playerBScores = new ArrayList<>();
 
         Move lastMoveA = null;
         Move lastMoveB = null;
@@ -45,10 +47,6 @@ public class Tournament {
 
             Move currentA = a.play(lastMoveB);
             Move currentB = b.play(lastMoveA);
-
-            System.out.println("Round " + i);
-            System.out.println("A move: " + currentA);
-            System.out.println("B move: " + currentB);
 
             lastMoveA = currentA;
             lastMoveB = currentB;
@@ -61,25 +59,20 @@ public class Tournament {
             a.addPoints(turnPayoff.aPlayerPoints());
             b.addPoints(turnPayoff.bPlayerPoints());
 
-            System.out.println("Round " + (i + 1) + " concluded.");
-            System.out.println(a.getName() + " points = " + a.getPoints());
-            System.out.println(b.getName() + " points = " + b.getPoints());
+            playerAScores.add(a.getPoints());
+            playerBScores.add(b.getPoints());
 
         }
 
-        if (a.getPoints() > b.getPoints()) {
-            System.out.println("Player " + a.getName() + " wins");
-        } else if (a.getPoints() < b.getPoints()) {
-            System.out.println("Player " + b.getName() + " wins");
-        } else {
-            System.out.println("It's a DRAW!");
-        }
-
-
+        return new MatchResult(a.getName(), b.getName(), playerAScores, playerBScores);
     }
 
-    public LinkedHashMap<String, Integer> runTournament(List<Agent> agents, PayoffMatrix matrix, int rounds) {
+    public TournamentResult runTournament(List<Agent> agents, PayoffMatrix matrix, int rounds) {
+
         List<Matchup> matchups = createMatchups(agents);
+
+        List<MatchResult> matchResults = new ArrayList<>();
+
         Map<String, Integer> leaderboard = new HashMap<>();
 
         for (Agent a: agents) {
@@ -87,7 +80,11 @@ public class Tournament {
         }
 
         for (Matchup m : matchups) {
-            runMatch(m.playerA, m.playerB, matrix, rounds);
+
+            MatchResult currentMatchResult;
+
+            currentMatchResult = runMatch(m.playerA, m.playerB, matrix, rounds);
+            matchResults.add(currentMatchResult);
 
             leaderboard.merge(m.playerA.getName(), m.playerA.getPoints(), Integer::sum);
             leaderboard.merge(m.playerB.getName(), m.playerB.getPoints(), Integer::sum);
@@ -96,7 +93,9 @@ public class Tournament {
             m.playerB.reset();
         }
 
-        return leaderboard.entrySet()
+        LinkedHashMap<String, Integer> orderedLeaderboard;
+
+        orderedLeaderboard = leaderboard.entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .collect(Collectors.toMap(
@@ -105,6 +104,8 @@ public class Tournament {
                         (e1, e2) -> e1,
                         LinkedHashMap::new
                 ));
+
+        return new TournamentResult(matchResults, orderedLeaderboard);
     }
 
 
