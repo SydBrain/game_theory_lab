@@ -1,5 +1,6 @@
 package org.lab.controller;
 
+import javafx.animation.PauseTransition;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -7,6 +8,7 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.util.Duration;
 import org.lab.model.*;
 import org.lab.model.PayoffMatrix;
 import org.lab.service.TournamentService;
@@ -32,8 +34,13 @@ public class TournamentController {
     @FXML private Label roundsValue;
     @FXML private ComboBox<MatchResult> matchSelector;
     @FXML private LineChart<Number, Number> lineChart;
+    @FXML private Button saveTournamentButton;
 
     private final TournamentService tournamentService = new TournamentService();
+
+    private TournamentResult lastResult;
+    private PayoffMatrix lastMatrix;
+    private int lastRounds;
 
     @FXML
     public void initialize() {
@@ -106,7 +113,22 @@ public class TournamentController {
 
         nashLabel.setText(sb.toString());
 
-        tournamentService.save(result, matrix, rounds);
+        lastResult = result;
+        lastMatrix = matrix;
+        lastRounds = rounds;
+        saveTournamentButton.setText("Save Tournament");
+        saveTournamentButton.setDisable(false);
+    }
+
+    @FXML
+    private void onSaveTournament() {
+        tournamentService.save(lastResult, lastMatrix, lastRounds);
+        saveTournamentButton.setDisable(true);
+        saveTournamentButton.setText("Saved ✓");
+
+        PauseTransition pause = new PauseTransition(Duration.seconds(2));
+        pause.setOnFinished(event -> saveTournamentButton.setText("Save Tournament"));
+        pause.play();
     }
 
     private void drawLineChart(MatchResult match) {

@@ -11,7 +11,7 @@ public class GameTheoryApp extends Application {
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/lab/view/tournament-view.fxml"));
         Scene scene = new Scene(loader.load(), 900, 700);
-        scene.getRoot().setStyle("-fx-base: #1e1e1e; -fx-background: #1e1e1e;");
+        scene.getStylesheets().add(getClass().getResource("/org/lab/view/style.css").toExternalForm());
         stage.setTitle("Game Theory Lab");
         stage.setScene(scene);
         stage.show();
