@@ -2,76 +2,165 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.chart.*?>
-<?import java.lang.String?>
 
-<ScrollPane fitToWidth="true"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.lab.controller.TournamentController">
+<StackPane styleClass="app-root"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="org.lab.controller.TournamentController">
 
-    <VBox spacing="16" styleClass="root-container">
+    <!-- ═══════════════════════════════════════════════════
+         STEP 1 — Configure
+    ════════════════════════════════════════════════════ -->
+    <ScrollPane fx:id="configPane" fitToWidth="true">
+        <VBox styleClass="root-container" spacing="28">
 
-        <!-- Game Configuration -->
-        <VBox styleClass="panel" spacing="12">
-            <Label text="GAME CONFIGURATION" styleClass="panel-header"/>
-            <ComboBox fx:id="gameSelector" promptText="Select a game" maxWidth="Infinity"/>
-            <Label text="STRATEGIES" styleClass="section-label"/>
-            <HBox spacing="16">
-                <CheckBox fx:id="cbCooperate" text="Always Cooperate" selected="true"/>
-                <CheckBox fx:id="cbDefect" text="Always Defect" selected="true"/>
-                <CheckBox fx:id="cbGrudger" text="Grudger" selected="true"/>
-                <CheckBox fx:id="cbPavlov" text="Pavlovian" selected="true"/>
-                <CheckBox fx:id="cbTitForTat" text="Tit For Tat" selected="true"/>
-            </HBox>
-            <HBox spacing="12" alignment="CENTER_LEFT">
-                <Label text="ROUNDS:"/>
-                <Slider fx:id="roundsSlider" min="5" max="200" value="10"
-                        showTickLabels="true" showTickMarks="true"
-                        majorTickUnit="50" minorTickCount="4" blockIncrement="5"
-                        HBox.hgrow="ALWAYS"/>
-                <Label fx:id="roundsValue" text="10" minWidth="30"/>
-            </HBox>
-            <HBox spacing="10">
-                <Button text="Run Tournament" onAction="#onRunTournament" styleClass="btn-primary"/>
+            <Label text="GAME THEORY LAB" styleClass="app-title"/>
+
+            <!-- Game Cards -->
+            <VBox spacing="10">
+                <Label text="SELECT GAME" styleClass="section-header"/>
+                <HBox spacing="12">
+
+                    <VBox fx:id="cardPrisoners" styleClass="game-card"
+                          HBox.hgrow="ALWAYS" maxWidth="Infinity" spacing="8">
+                        <Label text="Prisoner's Dilemma" styleClass="card-title"/>
+                        <Label text="Cooperation vs betrayal" styleClass="card-desc"/>
+                        <GridPane styleClass="payoff-grid" vgap="1" hgap="1">
+                            <Label text=""    GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="payoff-corner"/>
+                            <Label text="C"   GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="payoff-header"/>
+                            <Label text="D"   GridPane.rowIndex="0" GridPane.columnIndex="2" styleClass="payoff-header"/>
+                            <Label text="C"   GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="payoff-header"/>
+                            <Label text="3,3" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="payoff-cell"/>
+                            <Label text="0,5" GridPane.rowIndex="1" GridPane.columnIndex="2" styleClass="payoff-cell"/>
+                            <Label text="D"   GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="payoff-header"/>
+                            <Label text="5,0" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="payoff-cell"/>
+                            <Label text="1,1" GridPane.rowIndex="2" GridPane.columnIndex="2" styleClass="payoff-cell"/>
+                        </GridPane>
+                    </VBox>
+
+                    <VBox fx:id="cardStagHunt" styleClass="game-card"
+                          HBox.hgrow="ALWAYS" maxWidth="Infinity" spacing="8">
+                        <Label text="Stag Hunt" styleClass="card-title"/>
+                        <Label text="Coordination and trust" styleClass="card-desc"/>
+                        <GridPane styleClass="payoff-grid" vgap="1" hgap="1">
+                            <Label text=""    GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="payoff-corner"/>
+                            <Label text="C"   GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="payoff-header"/>
+                            <Label text="D"   GridPane.rowIndex="0" GridPane.columnIndex="2" styleClass="payoff-header"/>
+                            <Label text="C"   GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="payoff-header"/>
+                            <Label text="4,4" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="payoff-cell"/>
+                            <Label text="0,3" GridPane.rowIndex="1" GridPane.columnIndex="2" styleClass="payoff-cell"/>
+                            <Label text="D"   GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="payoff-header"/>
+                            <Label text="3,0" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="payoff-cell"/>
+                            <Label text="2,2" GridPane.rowIndex="2" GridPane.columnIndex="2" styleClass="payoff-cell"/>
+                        </GridPane>
+                    </VBox>
+
+                    <VBox fx:id="cardHawkDove" styleClass="game-card"
+                          HBox.hgrow="ALWAYS" maxWidth="Infinity" spacing="8">
+                        <Label text="Hawk-Dove" styleClass="card-title"/>
+                        <Label text="Aggression vs concession" styleClass="card-desc"/>
+                        <GridPane styleClass="payoff-grid" vgap="1" hgap="1">
+                            <Label text=""    GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="payoff-corner"/>
+                            <Label text="C"   GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="payoff-header"/>
+                            <Label text="D"   GridPane.rowIndex="0" GridPane.columnIndex="2" styleClass="payoff-header"/>
+                            <Label text="C"   GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="payoff-header"/>
+                            <Label text="3,3" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="payoff-cell"/>
+                            <Label text="1,5" GridPane.rowIndex="1" GridPane.columnIndex="2" styleClass="payoff-cell"/>
+                            <Label text="D"   GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="payoff-header"/>
+                            <Label text="5,1" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="payoff-cell"/>
+                            <Label text="0,0" GridPane.rowIndex="2" GridPane.columnIndex="2" styleClass="payoff-cell"/>
+                        </GridPane>
+                    </VBox>
+
+                </HBox>
+            </VBox>
+
+            <!-- Strategy Chips -->
+            <VBox spacing="10">
+                <Label text="SELECT STRATEGIES" styleClass="section-header"/>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <ToggleButton fx:id="chipCooperate"  text="Always Cooperate" styleClass="chip" selected="true"/>
+                    <ToggleButton fx:id="chipDefect"     text="Always Defect"    styleClass="chip" selected="true"/>
+                    <ToggleButton fx:id="chipGrudger"    text="Grudger"          styleClass="chip" selected="true"/>
+                    <ToggleButton fx:id="chipPavlov"     text="Pavlovian"        styleClass="chip" selected="true"/>
+                    <ToggleButton fx:id="chipTitForTat"  text="Tit For Tat"      styleClass="chip" selected="true"/>
+                </HBox>
+            </VBox>
+
+            <!-- Round Slider -->
+            <VBox spacing="10">
+                <Label text="ROUNDS" styleClass="section-header"/>
+                <HBox spacing="20" alignment="CENTER_LEFT">
+                    <Slider fx:id="roundsSlider" min="5" max="200" value="10"
+                            showTickLabels="true" showTickMarks="true"
+                            majorTickUnit="50" minorTickCount="4" blockIncrement="5"
+                            HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="roundsValue" text="10" styleClass="rounds-display"/>
+                </HBox>
+            </VBox>
+
+            <!-- Run Button -->
+            <Button fx:id="runButton" text="Run Tournament →" onAction="#onRunTournament"
+                    styleClass="btn-run" disable="true" maxWidth="Infinity"/>
+
+        </VBox>
+    </ScrollPane>
+
+    <!-- ═══════════════════════════════════════════════════
+         STEP 2 — Results
+    ════════════════════════════════════════════════════ -->
+    <ScrollPane fx:id="resultsPane" fitToWidth="true" visible="false" managed="false">
+        <VBox>
+
+            <!-- Top Bar -->
+            <HBox styleClass="results-topbar" alignment="CENTER_LEFT" spacing="16">
+                <Button text="← New Tournament" onAction="#onNewTournament" styleClass="btn-back"/>
+                <Label fx:id="resultsTitleLabel" text="" styleClass="results-title" HBox.hgrow="ALWAYS"/>
                 <Button fx:id="saveTournamentButton" text="Save Tournament" onAction="#onSaveTournament" disable="true"/>
             </HBox>
-        </VBox>
 
-        <!-- Nash Equilibria -->
-        <VBox styleClass="panel" spacing="8">
-            <Label text="NASH EQUILIBRIA" styleClass="panel-header"/>
-            <Label fx:id="nashLabel" text="—" styleClass="nash-label" wrapText="true"/>
-        </VBox>
+            <!-- Content -->
+            <VBox styleClass="results-content" spacing="16">
 
-        <!-- Tournament Results -->
-        <VBox styleClass="panel" spacing="12">
-            <Label text="TOURNAMENT RESULTS" styleClass="panel-header"/>
-            <HBox spacing="16">
-                <TableView fx:id="table" prefHeight="220" HBox.hgrow="ALWAYS" maxWidth="Infinity">
-                    <columns>
-                        <TableColumn fx:id="nameCol" text="Strategy" minWidth="150"/>
-                        <TableColumn fx:id="pointsCol" text="Points" minWidth="100"/>
-                    </columns>
-                </TableView>
-                <BarChart fx:id="chart" animated="false" prefHeight="220" HBox.hgrow="ALWAYS" maxWidth="Infinity">
-                    <xAxis>
-                        <CategoryAxis label="Strategy" tickLabelRotation="-45" animated="false"/>
-                    </xAxis>
-                    <yAxis>
-                        <NumberAxis label="Points" animated="false"/>
-                    </yAxis>
-                </BarChart>
-            </HBox>
-        </VBox>
+                <!-- Nash Equilibria -->
+                <VBox styleClass="nash-panel" spacing="8">
+                    <Label text="NASH EQUILIBRIA" styleClass="panel-header"/>
+                    <Label fx:id="nashLabel" text="—" styleClass="nash-label" wrapText="true"/>
+                </VBox>
 
-        <!-- Match Details -->
-        <VBox styleClass="panel" spacing="12">
-            <Label text="MATCH DETAILS" styleClass="panel-header"/>
-            <ComboBox fx:id="matchSelector" promptText="Select a match to view" maxWidth="Infinity"/>
-            <LineChart fx:id="lineChart" animated="false" prefHeight="300">
-                <xAxis><NumberAxis fx:id="roundAxis" label="Round"/></xAxis>
-                <yAxis><NumberAxis label="Cumulative Points"/></yAxis>
-            </LineChart>
-        </VBox>
+                <!-- Leaderboard -->
+                <VBox styleClass="panel" spacing="12">
+                    <Label text="TOURNAMENT RESULTS" styleClass="panel-header"/>
+                    <HBox spacing="16">
+                        <TableView fx:id="table" prefHeight="220" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                            <columns>
+                                <TableColumn fx:id="nameCol"   text="Strategy" minWidth="150"/>
+                                <TableColumn fx:id="pointsCol" text="Points"   minWidth="100"/>
+                            </columns>
+                        </TableView>
+                        <BarChart fx:id="chart" animated="false" prefHeight="220"
+                                  HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                            <xAxis>
+                                <CategoryAxis label="Strategy" tickLabelRotation="-45" animated="false"/>
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis label="Points" animated="false"/>
+                            </yAxis>
+                        </BarChart>
+                    </HBox>
+                </VBox>
 
-    </VBox>
-</ScrollPane>
+                <!-- Match Details -->
+                <VBox styleClass="panel" spacing="12">
+                    <Label text="MATCH DETAILS" styleClass="panel-header"/>
+                    <ComboBox fx:id="matchSelector" promptText="Select a match to view" maxWidth="Infinity"/>
+                    <LineChart fx:id="lineChart" animated="false" prefHeight="300">
+                        <xAxis><NumberAxis fx:id="roundAxis" label="Round"/></xAxis>
+                        <yAxis><NumberAxis label="Cumulative Points"/></yAxis>
+                    </LineChart>
+                </VBox>
+
+            </VBox>
+        </VBox>
+    </ScrollPane>
+
+</StackPane>
