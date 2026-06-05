@@ -8,6 +8,29 @@ import java.util.stream.Collectors;
 
 public class Tournament {
 
+    private List<Matchup> createMatchups(List<Agent> agents) {
+
+        List<Matchup> matchups = new ArrayList<>();
+
+        for (int i = 0; i < agents.size(); i++) {
+
+            for (int j = i + 1; j < agents.size(); j++) {
+
+                Agent playerA = agents.get(i);
+                Agent playerB = agents.get(j);
+
+                if (playerA != playerB) {
+                    Matchup currentMatchup = new Matchup(playerA, playerB);
+                    matchups.add(currentMatchup);
+                }
+            }
+        }
+
+        return matchups;
+    }
+
+    private record Matchup(Agent playerA, Agent playerB) {}
+
     public void runMatch(Agent a, Agent b, PrisonerPayoffMatrix matrix, int rounds) {
         System.out.println("Match between " + a.getName() + " and " + b.getName());
 
@@ -82,26 +105,5 @@ public class Tournament {
                 ));
     }
 
-    private List<Matchup> createMatchups(List<Agent> agents) {
 
-        List<Matchup> matchups = new ArrayList<>();
-
-        for (int i = 0; i < agents.size(); i++) {
-
-            for (int j = i + 1; j < agents.size(); j++) {
-
-                Agent playerA = agents.get(i);
-                Agent playerB = agents.get(j);
-
-                if (playerA != playerB) {
-                    Matchup currentMatchup = new Matchup(playerA, playerB);
-                    matchups.add(currentMatchup);
-                }
-            }
-        }
-
-        return matchups;
-    }
-
-    private record Matchup(Agent playerA, Agent playerB) {}
 }
