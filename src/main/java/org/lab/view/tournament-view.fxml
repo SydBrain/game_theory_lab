@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.chart.*?>
+
+<VBox spacing="8" style="-fx-padding: 20;"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.lab.view.TournamentController">
+
+    <HBox spacing="10">
+        <CheckBox fx:id="cbCooperate" text="Always Cooperate" selected="true"/>
+        <CheckBox fx:id="cbDefect" text="Always Defect" selected="true"/>
+        <CheckBox fx:id="cbGrudger" text="Grudger" selected="true"/>
+        <CheckBox fx:id="cbPavlov" text="Pavlovian" selected="true"/>
+        <CheckBox fx:id="cbTitForTat" text="Tit For Tat" selected="true"/>
+    </HBox>
+
+    <Button text="Run Tournament" onAction="#onRunTournament"/>
+
+    <TableView fx:id="table">
+        <columns>
+            <TableColumn fx:id="nameCol" text="Strategy" minWidth="150"/>
+            <TableColumn fx:id="pointsCol" text="Points" minWidth="100"/>
+        </columns>
+    </TableView>
+
+    <BarChart fx:id="chart">
+        <xAxis><CategoryAxis label="Strategy"/></xAxis>
+        <yAxis><NumberAxis label="Points"/></yAxis>
+    </BarChart>
+
+</VBox>
