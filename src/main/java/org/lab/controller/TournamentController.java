@@ -9,6 +9,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import org.lab.model.*;
 import org.lab.model.PayoffMatrix;
+import org.lab.service.TournamentService;
 import org.lab.simulation.MatchResult;
 import org.lab.simulation.NashCalculator;
 import org.lab.simulation.Tournament;
@@ -32,6 +33,7 @@ public class TournamentController {
     @FXML private ComboBox<MatchResult> matchSelector;
     @FXML private LineChart<Number, Number> lineChart;
 
+    private final TournamentService tournamentService = new TournamentService();
 
     @FXML
     public void initialize() {
@@ -103,6 +105,8 @@ public class TournamentController {
         }
 
         nashLabel.setText(sb.toString());
+
+        tournamentService.save(result, matrix, rounds);
     }
 
     private void drawLineChart(MatchResult match) {

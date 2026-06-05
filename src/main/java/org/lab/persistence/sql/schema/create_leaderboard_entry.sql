@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS LEADERBOARD_ENTRY
+(
+    id INTEGER PRIMARY KEY,
+    tournament_id INT,
+    strategy TEXT NOT NULL,
+    total_points INT,
+
+    FOREIGN KEY (tournament_id)
+    REFERENCES TOURNAMENT(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+)

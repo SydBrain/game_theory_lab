@@ -105,7 +105,7 @@ public class Tournament {
                         LinkedHashMap::new
                 ));
 
-        return new TournamentResult(matchResults, orderedLeaderboard);
+        return new TournamentResult(matrix.getName(), matchResults, orderedLeaderboard);
     }
 
 
