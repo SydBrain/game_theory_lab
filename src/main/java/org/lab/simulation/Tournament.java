@@ -2,6 +2,8 @@ package org.lab.simulation;
 
 import org.lab.model.Agent;
 import org.lab.model.Move;
+import org.lab.model.Payoff;
+import org.lab.model.PayoffMatrix;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -31,7 +33,7 @@ public class Tournament {
 
     private record Matchup(Agent playerA, Agent playerB) {}
 
-    public void runMatch(Agent a, Agent b, PrisonerPayoffMatrix matrix, int rounds) {
+    public void runMatch(Agent a, Agent b, PayoffMatrix matrix, int rounds) {
         System.out.println("Match between " + a.getName() + " and " + b.getName());
 
         Move lastMoveA = null;
@@ -76,7 +78,7 @@ public class Tournament {
 
     }
 
-    public LinkedHashMap<String, Integer> runTournament(List<Agent> agents, PrisonerPayoffMatrix matrix, int rounds) {
+    public LinkedHashMap<String, Integer> runTournament(List<Agent> agents, PayoffMatrix matrix, int rounds) {
         List<Matchup> matchups = createMatchups(agents);
         Map<String, Integer> leaderboard = new HashMap<>();
 

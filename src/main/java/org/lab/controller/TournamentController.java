@@ -1,4 +1,4 @@
-package org.lab.view;
+package org.lab.controller;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -9,7 +9,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.lab.model.*;
-import org.lab.simulation.PrisonerPayoffMatrix;
+import org.lab.model.PayoffMatrix;
 import org.lab.simulation.Tournament;
 
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class TournamentController {
         if (agents.size() < 2) return;
 
         Tournament tournament = new Tournament();
-        PrisonerPayoffMatrix matrix = new PrisonerPayoffMatrix();
+        PayoffMatrix matrix = PayoffMatrix.prisonersDilemma();
         Map<String, Integer> leaderboard = tournament.runTournament(agents, matrix, 10);
 
         table.getItems().setAll(leaderboard.entrySet());
