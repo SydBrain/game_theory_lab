@@ -5,11 +5,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import org.lab.model.*;
 import org.lab.model.PayoffMatrix;
+import org.lab.simulation.NashCalculator;
 import org.lab.simulation.Tournament;
 
 import java.util.ArrayList;
@@ -18,14 +17,24 @@ import java.util.Map;
 
 public class TournamentController {
 
+    @FXML private ComboBox<PayoffMatrix> gameSelector;
     @FXML private CheckBox cbCooperate, cbDefect, cbGrudger, cbPavlov, cbTitForTat;
     @FXML private TableView<Map.Entry<String, Integer>> table;
     @FXML private TableColumn<Map.Entry<String, Integer>, String> nameCol;
     @FXML private TableColumn<Map.Entry<String, Integer>, Integer> pointsCol;
     @FXML private BarChart<String, Number> chart;
+    @FXML private Label nashLabel;
+
 
     @FXML
     public void initialize() {
+
+        gameSelector.getItems().addAll(
+                PayoffMatrix.prisonersDilemma(),
+                PayoffMatrix.stagHunt(),
+                PayoffMatrix.hawkDove()
+        );
+
         nameCol.setCellValueFactory(cell ->
                 new SimpleStringProperty(cell.getValue().getKey())
         );
@@ -46,7 +55,8 @@ public class TournamentController {
         if (agents.size() < 2) return;
 
         Tournament tournament = new Tournament();
-        PayoffMatrix matrix = PayoffMatrix.prisonersDilemma();
+        PayoffMatrix matrix = gameSelector.getValue();
+        if (matrix == null) return;
         Map<String, Integer> leaderboard = tournament.runTournament(agents, matrix, 10);
 
         table.getItems().setAll(leaderboard.entrySet());
@@ -58,5 +68,16 @@ public class TournamentController {
         );
         chart.getData().clear();
         chart.getData().add(series);
+
+        NashCalculator nash = new NashCalculator();
+        List<Move[]> equilibria = nash.findPureNashEquilibria(matrix);
+
+        StringBuilder sb = new StringBuilder("Nash Equilibria: ");
+
+        for (Move[] eq : equilibria) {
+            sb.append("(").append(eq[0]).append(", ").append(eq[1]).append(") ");
+        }
+
+        nashLabel.setText(sb.toString());
     }
 }

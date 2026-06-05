@@ -42,6 +42,9 @@ public class PayoffMatrix {
         });
     }
 
+    @Override
+    public String toString() { return name; }
+
     public String getName() { return name; }
     public int getRowCount() { return matrix.length; }
     public int getColCount() { return matrix[0].length; }
