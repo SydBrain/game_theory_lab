@@ -4,6 +4,11 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.lab.model.Move;
+import org.lab.model.PayoffMatrix;
+import org.lab.simulation.NashCalculator;
+
+import java.util.List;
 
 public class GameTheoryApp extends Application {
 
